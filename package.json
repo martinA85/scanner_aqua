@@ -1,0 +1,20 @@
+{
+  "name": "barcode_electron",
+  "version": "1.0.0",
+  "description": "Apps for card scanner aqua attitude",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "author": "Martin Allimoner <martin@noosys.fr>",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^1.8.4"
+  },
+  "dependencies": {
+    "json-rpc-client": "^0.2.2",
+    "node-odoo": "^0.1.0",
+    "odoo-xmlrpc": "^1.0.6"
+  }
+}

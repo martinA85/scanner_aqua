@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Barcode aqua</title>
+      <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+      
+    </head>
+    <body>
+      <span id="alert_div" class="alert"></span>
+      <h1>Barcode scanner</h1>
+      <div id="card_information">
+        <p class="user"></p>
+        <p class="barcode"></p>
+        <p class="card_name"></p>
+      </div>
+
+    </body>
+
+    <audio id="success_sound">
+      <source src="res/sound/beep.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <audio id="fail_sound">
+      <source src="res/sound/fail.wav" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+
+    <script>  
+        require('./js/jquery-3.3.1.min.js')
+        require('./js/barcode_scanner.js')
+      </script>
+  </html>
