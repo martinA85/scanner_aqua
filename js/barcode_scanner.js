@@ -15,6 +15,8 @@ function init(){
         password: 'admin'
       });
     render_div = document.getElementById("card_information");
+    alert_div = document.getElementById("out_message").parentElement;
+    out_icon = document.getElementById("out_icon");
 }
 
 //function executed on keypress
@@ -73,6 +75,7 @@ function scan_card(code_barre){
             //no card found
             }else{
                 msg = "Code barre non reconnus"
+                reset_screen();
                 document.getElementById("card_barcode").innerHTML = code_barre.toString();
                 set_alert(msg, "error");
             }
@@ -107,23 +110,22 @@ function set_alert(string, type){
 
         //output icon in out_icon
         out_icon.src = "res/img/valid.png";
-        out_icon.parentElement.style.backgroundColor = "";
-        out_icon.parentElement.style.backgroundColor = "rgba(30, 255, 0, 0.199);";
+        out_icon.parentElement.style.backgroundColor = "rgba(30, 255, 0, 0.199)";
         console.log(out_icon.parentElement.style.backgroundColor);
         
         document.getElementById("success_sound").volume = 0.5;
         //document.getElementById("success_sound").play();
     }
     document.getElementById("out_message").innerHTML = string;
+    setTimeout(reset_screen, 60000);
 }
 
 //function that render card information
 function render_scan(card, message){
-    document.getElementById("owner").innerHTML = card.client_id[1];
-    document.getElementById("card_barcode").innerHTML = card.barcode;
-    document.getElementById("card_credit").innerHTML = card.credit_count;
+    //change type with message
     if(message == "presence valider"){
         type = "succes";
+        card.credit_count = card.credit_count - 1; 
     }else if(message == "plus de session"){
         type = "error";
     }else if(message == "aucune session proche"){
@@ -131,7 +133,34 @@ function render_scan(card, message){
     }else if(message == "presence déjà valider"){
         type="error";
     }
+    //updating card information
+    document.getElementById("owner").innerHTML = card.client_id[1];
+    document.getElementById("card_barcode").innerHTML = card.barcode;
+    document.getElementById("card_credit").innerHTML = card.credit_count;
     set_alert(message, type);
+
+}
+
+
+//function that reset screen to original state
+function reset_screen(){
+
+    //reset card information
+    document.getElementById("owner").innerHTML = "";
+    document.getElementById("card_barcode").innerHTML = "";
+    document.getElementById("card_credit").innerHTML = "";
+
+    //reset out_img
+    out_icon.parentElement.style.backgroundColor = "rgba(85, 144, 199, 0.199)";
+    out_icon.src = "res/img/scan.png";
+
+    //reset message
+    document.getElementById("out_message").innerHTML = "Scannez votre carte";
+
+    //reset alert div
+    alert_div.classList.remove("alert-danger");
+    alert_div.classList.remove("alert-success");
+    alert_div.classList.add("alert-info");
 
 }
 
