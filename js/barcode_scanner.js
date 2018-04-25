@@ -66,12 +66,14 @@ function scan_card(code_barre){
                     //third request : executing scan_card function on our card object
                     odoo.execute_kw('sport.sport_card', 'scan_card', params, function(err3, value3){
                         if (err2) { return console.log(err2); }
-                        render_scan(card ,value3)
+                        console.log(card);
+                        render_scan(card ,value3);
                     });
                 });
             //no card found
             }else{
                 msg = "Code barre non reconnus"
+                document.getElementById("card_barcode").innerHTML = code_barre.toString();
                 set_alert(msg, "error");
             }
         });
@@ -80,34 +82,54 @@ function scan_card(code_barre){
 }
 //function that render alert
 function set_alert(string, type){
-    alert_div = document.getElementById("alert_div");
+    alert_div = document.getElementById("out_message").parentElement;
+    out_icon = document.getElementById("out_icon");
 
     if(type == "error"){
-        alert_div.classList.add("alert-danger");
+        //output message in alert div        
         alert_div.classList.remove("alert-success");
-        alert_div.innerHTML = string;
+        alert_div.classList.remove("alert-info");
+        alert_div.classList.add("alert-danger");
+
+        //output icon in out_icon
+        out_icon.src = "res/img/wrong.png";
+        out_icon.parentElement.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
+        console.log(out_icon.parentElement.style.backgroundColor);
+
         document.getElementById("fail_sound").volume = 0.5;
         //document.getElementById("fail_sound").play();
     }else if(type == "succes"){
-        console.log("success");
-        alert_div.classList.add("alert-success");
+        
+        //output message in alert div        
         alert_div.classList.remove("alert-danger");
-        alert_div.innerHTML = string;
+        alert_div.classList.remove("alert-info");
+        alert_div.classList.add("alert-success");
+
+        //output icon in out_icon
+        out_icon.src = "res/img/valid.png";
+        out_icon.parentElement.style.backgroundColor = "";
+        out_icon.parentElement.style.backgroundColor = "rgba(30, 255, 0, 0.199);";
+        console.log(out_icon.parentElement.style.backgroundColor);
+        
         document.getElementById("success_sound").volume = 0.5;
         //document.getElementById("success_sound").play();
     }
+    document.getElementById("out_message").innerHTML = string;
 }
 
 //function that render card information
 function render_scan(card, message){
-    render_div.getElementsByClassName("user")[0].innerHTML = card.client_id[1];
-    render_div.getElementsByClassName("barcode")[0].innerHTML = card.barcode;
+    document.getElementById("owner").innerHTML = card.client_id[1];
+    document.getElementById("card_barcode").innerHTML = card.barcode;
+    document.getElementById("card_credit").innerHTML = card.credit_count;
     if(message == "presence valider"){
         type = "succes";
     }else if(message == "plus de session"){
         type = "error";
     }else if(message == "aucune session proche"){
         type = "error";
+    }else if(message == "presence déjà valider"){
+        type="error";
     }
     set_alert(message, type);
 

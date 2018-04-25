@@ -4,15 +4,38 @@
       <meta charset="UTF-8">
       <title>Barcode aqua</title>
       <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="res/css/style.css">
       
     </head>
     <body>
-      <span id="alert_div" class="alert"></span>
-      <h1>Barcode scanner</h1>
-      <div id="card_information">
-        <p class="user"></p>
-        <p class="barcode"></p>
-        <p class="card_name"></p>
+
+      <div class="page-header header">
+        <div class="row">
+          <div class="col-sm-1">
+            <img src="res/img/logo.jpg" />
+          </div>
+          <div class="col-sm-10">
+            <h1 class="text-center header_title">Aqua Attitude</h1>
+          </div>
+        </div>
+      </div>
+
+      <div id="out_div">
+        <div class="col-sm-4 offset-4 text-center img_out">
+          <img id="out_icon" src="res/img/scan.png" />
+        </div>
+        <div class="text-center col-sm-4 offset-4 alert alert-info">
+          <h2 id="out_message">Scannez votre carte</h2>
+        </div>
+      </div>
+
+      <div id="info_div" class="col-sm-10 offset-1 text-center">
+        <div class="text-center">
+            <img src="res/img/card.png" />
+            <p>Proprietaire de la carte : <span id="owner"></span></p>
+            <p>Code de la carte : <span id="card_barcode"></span></p>
+            <p>Séance réstante : <span id="card_credit"></span></p>
+        </div>
       </div>
 
     </body>
@@ -27,7 +50,6 @@
     </audio>
 
     <script>  
-        require('./js/jquery-3.3.1.min.js')
         require('./js/barcode_scanner.js')
       </script>
   </html>
