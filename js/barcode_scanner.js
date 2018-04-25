@@ -122,22 +122,35 @@ function set_alert(string, type){
 
 //function that render card information
 function render_scan(card, message){
-    //change type with message
-    if(message == "presence valider"){
+    string = "";
+    //change type according to message
+    //0 = valid
+    if(message == "0"){
         type = "succes";
         card.credit_count = card.credit_count - 1; 
-    }else if(message == "plus de session"){
+
+        string = "Présence validée";
+    //2 = no credit on card
+    }else if(message == "2"){
         type = "error";
-    }else if(message == "aucune session proche"){
+
+        string = "Plus de credit sur la carte";
+    //3 = no session soon
+    }else if(message == "3"){
         type = "error";
-    }else if(message == "presence déjà valider"){
+
+        string = "Pas d'inscription à une séance proche";
+    //1 = already valid
+    }else if(message == "1"){
         type="error";
+
+        string = "Présence déjà validée";
     }
     //updating card information
     document.getElementById("owner").innerHTML = card.client_id[1];
     document.getElementById("card_barcode").innerHTML = card.barcode;
     document.getElementById("card_credit").innerHTML = card.credit_count;
-    set_alert(message, type);
+    set_alert(string, type);
 
 }
 
