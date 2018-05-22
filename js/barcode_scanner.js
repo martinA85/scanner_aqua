@@ -10,9 +10,9 @@ function init(){
     odoo = new Odoo({
         url: "localhost",
         port: 8069,
-        db: 'sport_aqua',
-        username: 'admin',
-        password: 'admin'
+        db: 'sport_test',
+        username: 'martin@noosys.fr',
+        password: 'pass'
       });
     render_div = document.getElementById("card_information");
     alert_div = document.getElementById("out_message").parentElement;
