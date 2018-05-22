@@ -19,7 +19,16 @@ const {app, BrowserWindow} = require('electron');
             
         }));
 
-        win.webContents.openDevTools()
+        win.on('close', function(event){
+            win = null;
+        });
+
+        //win.webContents.openDevTools()
     }
 
     app.on('ready', createWindow)
+
+    //Sur l'evenement ou toutes les fenetre sont fermer : quitte l'application
+    app.on("window-all-close", function(){
+        app.quit()
+    })
