@@ -10,9 +10,9 @@ function init(){
     odoo = new Odoo({
         url: "localhost",
         port: 8069,
-        db: 'aqua_demo',
+        db: 'enterprise',
         username: 'martin@noosys.fr',
-        password: 'password'
+        password: 'pass'
       });
     render_div = document.getElementById("card_information");
     alert_div = document.getElementById("out_message").parentElement;
@@ -27,13 +27,12 @@ function keydown(e){
             scan_card(barcode);
             barcode="";
         }
-        else if(code==9)// Tab key hit
+        else if(code==9 || code==16)// Tab key hit or DLE
         {
         }
         else
         {
-            if(String.fromCharCode(code) != "G"){
-                console.log(String.fromCharCode(code))
+            if(String.fromCharCode(code) != "G" || String.fromCharCode(code) != "P"){
                 barcode=barcode+String.fromCharCode(code);
             }
             

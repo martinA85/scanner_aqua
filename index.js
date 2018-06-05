@@ -23,7 +23,7 @@ const {app, BrowserWindow} = require('electron');
             win = null;
         });
 
-        //win.webContents.openDevTools()
+        win.webContents.openDevTools()
     }
 
     app.on('ready', createWindow)
