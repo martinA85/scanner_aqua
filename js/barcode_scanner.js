@@ -10,9 +10,9 @@ function init(){
     odoo = new Odoo({
         url: "localhost",
         port: 8069,
-        db: 'sport_test',
+        db: 'aqua_demo',
         username: 'martin@noosys.fr',
-        password: 'pass'
+        password: 'password'
       });
     render_div = document.getElementById("card_information");
     alert_div = document.getElementById("out_message").parentElement;
@@ -23,7 +23,7 @@ function init(){
 function keydown(e){
     var code = (e.keyCode ? e.keyCode : e.which);
     if(code==13)// Enter key hit
-        {
+        {   
             scan_card(barcode);
             barcode="";
         }
@@ -32,7 +32,11 @@ function keydown(e){
         }
         else
         {
-            barcode=barcode+String.fromCharCode(code);
+            if(String.fromCharCode(code) != "G"){
+                console.log(String.fromCharCode(code))
+                barcode=barcode+String.fromCharCode(code);
+            }
+            
         }
 }
 
@@ -47,12 +51,14 @@ function scan_card(code_barre){
 
         //param array (used for search query) : in our case the barcode
         var inParams = [];
+        console.log(code_barre.toString());
         inParams.push([['barcode', '=', code_barre.toString()]]);
         //global param array for the query (contain inParam)
         var params = [];
         params.push(inParams);
+        console.log(params)
         //Executing first request : looking for our card with the right barcode
-        odoo.execute_kw('sport.sport_card', 'search', params, function (err, value) {
+        odoo.execute_kw('sport.badge', 'search', params, function (err, value) {
             if (err) { return console.log(err); }
             //if card exist
             if(value.length > 0){
@@ -61,14 +67,14 @@ function scan_card(code_barre){
                 var params = [];
                 params.push(inParams);
                 //second request : used to get our card object
-                odoo.execute_kw('sport.sport_card', 'read', params, function (err2, value2) {
+                odoo.execute_kw('sport.badge', 'read', params, function (err2, value2) {
                     if (err2) { return console.log(err2); }
                     //card object
                     card = value2[0];
                     //third request : executing scan_card function on our card object
-                    odoo.execute_kw('sport.sport_card', 'scan_card', params, function(err3, value3){
+                    odoo.execute_kw('sport.badge', 'scan_card', params, function(err3, value3){
                         if (err2) { return console.log(err2); }
-                        console.log(card);
+                        console.log(value3);
                         render_scan(card ,value3);
                     });
                 });
@@ -97,7 +103,6 @@ function set_alert(string, type){
         //output icon in out_icon
         out_icon.src = "res/img/wrong.png";
         out_icon.parentElement.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
-        console.log(out_icon.parentElement.style.backgroundColor);
 
         document.getElementById("fail_sound").volume = 0.5;
         //document.getElementById("fail_sound").play();
@@ -111,7 +116,6 @@ function set_alert(string, type){
         //output icon in out_icon
         out_icon.src = "res/img/valid.png";
         out_icon.parentElement.style.backgroundColor = "rgba(30, 255, 0, 0.199)";
-        console.log(out_icon.parentElement.style.backgroundColor);
         
         document.getElementById("success_sound").volume = 0.5;
         //document.getElementById("success_sound").play();
@@ -125,10 +129,9 @@ function render_scan(card, message){
     string = "";
     //change type according to message
     //0 = valid
+    console.log("message : " + message)
     if(message == "0"){
         type = "succes";
-        card.credit_count = card.credit_count - 1; 
-
         string = "Présence validée";
     //2 = no credit on card
     }else if(message == "2"){
@@ -145,11 +148,15 @@ function render_scan(card, message){
         type="error";
 
         string = "Présence déjà validée";
+    }else if(message == "4"){
+        type="error"
+
+        string = "Aucune inscription"
     }
     //updating card information
     document.getElementById("owner").innerHTML = card.client_id[1];
     document.getElementById("card_barcode").innerHTML = card.barcode;
-    document.getElementById("card_credit").innerHTML = card.credit_count;
+    console.log(type);
     set_alert(string, type);
 
 }
@@ -161,8 +168,6 @@ function reset_screen(){
     //reset card information
     document.getElementById("owner").innerHTML = "";
     document.getElementById("card_barcode").innerHTML = "";
-    document.getElementById("card_credit").innerHTML = "";
-
     //reset out_img
     out_icon.parentElement.style.backgroundColor = "rgba(85, 144, 199, 0.199)";
     out_icon.src = "res/img/scan.png";
